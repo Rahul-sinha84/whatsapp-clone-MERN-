@@ -1,0 +1,10 @@
+.App {
+  display: flex;
+  height: 90vh;
+  width: 90vw;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.308);
+}
