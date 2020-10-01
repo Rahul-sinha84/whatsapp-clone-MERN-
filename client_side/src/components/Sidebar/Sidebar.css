@@ -2,9 +2,10 @@
   flex: 0.35;
   display: flex;
   flex-direction: column;
+  background-color: #fff;
 }
 .sidebar__header {
-  height: 8%;
+  height: 10%;
   background-color: #ededed;
   display: flex;
   justify-content: space-between;
