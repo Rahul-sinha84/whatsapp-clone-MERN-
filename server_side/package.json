@@ -1,0 +1,22 @@
+{
+  "name": "server_side",
+  "version": "1.0.0",
+  "description": "for managing server of the clone",
+  "main": "start.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rahul Sinha",
+  "license": "ISC",
+  "dependencies": {
+    "@std/esm": "^0.26.0",
+    "apollo-server-express": "^2.18.1",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/register": "^7.11.5"
+  }
+}
