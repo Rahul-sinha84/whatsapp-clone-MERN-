@@ -1,0 +1,14 @@
+.sidebar__chats--component {
+  display: flex;
+  background-color: white;
+  height: 12%;
+  align-items: center;
+  border-bottom: 1px solid #f6f6f6;
+  cursor: pointer;
+}
+.sidebar__chats--component:hover {
+  background-color: #ebebeb;
+}
+.sidebar__chats--dp {
+  margin: 0 20px 0 20px;
+}
