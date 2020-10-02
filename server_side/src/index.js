@@ -1,12 +1,14 @@
 import express from "express";
 import mongoose from "mongoose";
 import { ApolloServer } from "apollo-server-express";
+import cors from "cors";
 const PORT = process.env.PORT || 9000;
 import { resolvers } from "./graphQL/resolvers";
 import { typeDefs } from "./graphQL/typeDefs";
 const app = express();
 //for middleware
 app.use(express.json());
+app.use(cors());
 
 mongoose.connect("mongodb://localhost/whatsapp_clone", {
   useUnifiedTopology: true,
