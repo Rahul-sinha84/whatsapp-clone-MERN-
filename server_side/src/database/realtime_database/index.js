@@ -44,6 +44,7 @@ db.once("open", () => {
     if (change.operationType === "insert") {
       const roomDetails = change.fullDocument;
       pusher.trigger("rooms", "inserted", {
+        _id: roomDetails._id,
         name: roomDetails.name,
         lastMessage: roomDetails.lastMessage,
         messages: roomDetails.messages,
