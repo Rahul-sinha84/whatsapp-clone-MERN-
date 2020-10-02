@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Sidebar.css";
 import { Avatar, IconButton } from "@material-ui/core";
 import {
@@ -7,8 +7,63 @@ import {
   MoreVertRounded,
   SearchRounded,
 } from "@material-ui/icons";
+import Pusher from "pusher-js";
+import SidebarChat from "../SidebarChat";
+import fetchGraphQL from "../../apis/fetchGraphQL";
+
+var newRoomAdded = 0;
+
+const addNewRoom = async () => {
+  const newRoom = prompt("Name of new Room...");
+
+  const response = await fetchGraphQL.post("/graphql", {
+    query: `
+      mutation{
+        createRoom(name:"${newRoom}"){
+          name lastMessage {
+            message
+          }
+        }
+      }
+    `,
+  });
+  newRoomAdded++;
+};
 
 const Sidebar = () => {
+  const [rooms, setRoom] = useState([]);
+  /*******************************************for pusher(ROOM)**************** */
+  useEffect(() => {
+    const pusher = new Pusher("09208efbb2623f5d3ae0", {
+      cluster: "ap2",
+    });
+
+    const channel = pusher.subscribe("rooms");
+    channel.bind("inserted", function (recentRoom) {
+      setRoom([...rooms, recentRoom]);
+    });
+    return () => {
+      channel.unsubscribe();
+      channel.unbind_all();
+    };
+  }, [newRoomAdded]);
+  /*********************************************For fetching all Rooms******************** */
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetchGraphQL.post("/graphql", {
+        query: `
+        query{
+          getAllRooms{
+            name lastMessage{message} messages{message timestamp _id} _id
+          }
+        }
+        `,
+      });
+      setRoom(response.data.data.getAllRooms);
+    })();
+  }, [newRoomAdded]);
+
   return (
     <div className="sidebar">
       <div className="sidebar__header">
@@ -44,69 +99,12 @@ const Sidebar = () => {
         </div>
       </div>
       <div className="sidebar__chats">
-        <div className="sidebar__chats--component">
-          <Avatar className="sidebar__chats--dp" />
-          <div className="sidebar__chats--info">
-            <h3>Room Name</h3>
-            <p>Last message</p>
-          </div>
+        <div key={0} className="sidebar__chats--add" onClick={addNewRoom}>
+          <h3>Add new Chat</h3>
         </div>
-        <div className="sidebar__chats--component">
-          <Avatar className="sidebar__chats--dp" />
-          <div className="sidebar__chats--info">
-            <h3>Room Name</h3>
-            <p>Last message</p>
-          </div>
-        </div>
-        <div className="sidebar__chats--component">
-          <Avatar className="sidebar__chats--dp" />
-          <div className="sidebar__chats--info">
-            <h3>Room Name</h3>
-            <p>Last message</p>
-          </div>
-        </div>
-        <div className="sidebar__chats--component">
-          <Avatar className="sidebar__chats--dp" />
-          <div className="sidebar__chats--info">
-            <h3>Room Name</h3>
-            <p>Last message</p>
-          </div>
-        </div>
-        <div className="sidebar__chats--component">
-          <Avatar className="sidebar__chats--dp" />
-          <div className="sidebar__chats--info">
-            <h3>Room Name</h3>
-            <p>Last message</p>
-          </div>
-        </div>
-        <div className="sidebar__chats--component">
-          <Avatar className="sidebar__chats--dp" />
-          <div className="sidebar__chats--info">
-            <h3>Room Name</h3>
-            <p>Last message</p>
-          </div>
-        </div>
-        <div className="sidebar__chats--component">
-          <Avatar className="sidebar__chats--dp" />
-          <div className="sidebar__chats--info">
-            <h3>Room Name</h3>
-            <p>Last message</p>
-          </div>
-        </div>
-        <div className="sidebar__chats--component">
-          <Avatar className="sidebar__chats--dp" />
-          <div className="sidebar__chats--info">
-            <h3>Room Name</h3>
-            <p>Last message</p>
-          </div>
-        </div>
-        <div className="sidebar__chats--component">
-          <Avatar className="sidebar__chats--dp" />
-          <div className="sidebar__chats--info">
-            <h3>Room Name</h3>
-            <p>Last message</p>
-          </div>
-        </div>
+        {rooms.map((val) => (
+          <SidebarChat key={val._id} newChat={val} />
+        ))}
       </div>
     </div>
   );

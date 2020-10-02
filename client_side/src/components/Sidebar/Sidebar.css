@@ -50,17 +50,15 @@
   flex: 1;
   overflow: scroll;
 }
-.sidebar__chats--component {
+.sidebar__chats--add {
   display: flex;
   background-color: white;
   height: 12%;
   align-items: center;
   border-bottom: 1px solid #f6f6f6;
   cursor: pointer;
+  justify-content: center;
 }
-.sidebar__chats--component:hover {
+.sidebar__chats--add:hover {
   background-color: #ebebeb;
-}
-.sidebar__chats--dp {
-  margin: 0 20px 0 20px;
 }
