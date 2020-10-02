@@ -1,5 +1,5 @@
-import { Message } from "../dbSchema/message";
-import { Room } from "../dbSchema/room";
+import { Message } from "../database/dbSchema/message";
+import { Room } from "../database/dbSchema/room";
 
 export const resolvers = {
   Query: {
@@ -16,11 +16,13 @@ export const resolvers = {
     createMessage: (parent, { _id, name, message, uniqueId, timestamp }) =>
       Message.create({ name, message, uniqueId, timestamp })
         .then((createdMessage) => {
-          Room.findById({ _id }).then((foundRoom) => {
-            foundRoom.messages.push(createdMessage);
-            foundRoom.lastMessage = createdMessage;
-            foundRoom.save();
-          });
+          Room.findById({ _id })
+            .then((foundRoom) => {
+              foundRoom.messages.push(createdMessage);
+              foundRoom.lastMessage = createdMessage;
+              foundRoom.save();
+            })
+            .catch((err) => err);
           return createdMessage;
         })
         .catch((err) => err),
