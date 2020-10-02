@@ -7,6 +7,10 @@ export const resolvers = {
       Room.find()
         .then((response) => response)
         .catch((err) => err),
+    getRoom: (parent, { _id }) =>
+      Room.findById(_id)
+        .then((foundRoom) => foundRoom)
+        .catch((err) => err),
   },
   Mutation: {
     createMessage: (parent, { _id, name, message, uniqueId, timestamp }) =>

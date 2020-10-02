@@ -3,6 +3,7 @@ import { gql } from "apollo-server-express";
 export const typeDefs = gql`
   type Query {
     getAllRooms: [Room!]!
+    getRoom(_id: ID!): Room!
   }
   type Room {
     _id: ID!
