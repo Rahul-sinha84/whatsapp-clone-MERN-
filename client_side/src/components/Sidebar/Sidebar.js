@@ -15,8 +15,7 @@ var newRoomAdded = 0;
 
 const addNewRoom = async () => {
   const newRoom = prompt("Name of new Room...");
-
-  const response = await fetchGraphQL.post("/graphql", {
+  await fetchGraphQL.post("/graphql", {
     query: `
       mutation{
         createRoom(name:"${newRoom}"){
@@ -30,7 +29,7 @@ const addNewRoom = async () => {
   newRoomAdded++;
 };
 
-const Sidebar = () => {
+const Sidebar = ({ checkLastMessage }) => {
   const [rooms, setRoom] = useState([]);
   /*******************************************for pusher(ROOM)**************** */
   useEffect(() => {
@@ -55,14 +54,14 @@ const Sidebar = () => {
         query: `
         query{
           getAllRooms{
-            name lastMessage{message} messages{message timestamp _id} _id
+            name lastMessage{message} _id
           }
         }
         `,
       });
       setRoom(response.data.data.getAllRooms);
     })();
-  }, [newRoomAdded]);
+  }, [newRoomAdded, checkLastMessage, rooms.length]);
 
   return (
     <div className="sidebar">

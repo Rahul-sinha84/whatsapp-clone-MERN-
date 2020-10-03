@@ -5,6 +5,10 @@
   align-items: center;
   border-bottom: 1px solid #f6f6f6;
   cursor: pointer;
+  color: black;
+}
+.link {
+  text-decoration: none;
 }
 .sidebar__chats--component:hover {
   background-color: #ebebeb;
