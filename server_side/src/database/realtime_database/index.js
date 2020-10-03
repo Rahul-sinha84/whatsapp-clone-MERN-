@@ -24,6 +24,7 @@ db.once("open", () => {
       const messageDetails = change.fullDocument;
       //triggering pusher
       pusher.trigger("messages", "inserted", {
+        _id: messageDetails._id,
         name: messageDetails.name,
         message: messageDetails.message,
         uniqueId: messageDetails.uniqueId,
