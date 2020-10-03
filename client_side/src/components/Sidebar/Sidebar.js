@@ -10,6 +10,7 @@ import {
 import Pusher from "pusher-js";
 import SidebarChat from "../SidebarChat";
 import fetchGraphQL from "../../apis/fetchGraphQL";
+import { connect } from "react-redux";
 
 var newRoomAdded = 0;
 
@@ -29,7 +30,7 @@ const addNewRoom = async () => {
   newRoomAdded++;
 };
 
-const Sidebar = ({ checkLastMessage }) => {
+const Sidebar = ({ checkLastMessage, currentUser }) => {
   const [rooms, setRoom] = useState([]);
   /*******************************************for pusher(ROOM)**************** */
   useEffect(() => {
@@ -54,7 +55,7 @@ const Sidebar = ({ checkLastMessage }) => {
         query: `
         query{
           getAllRooms{
-            name lastMessage{message} _id
+            name lastMessage{message uniqueId} _id
           }
         }
         `,
@@ -67,7 +68,7 @@ const Sidebar = ({ checkLastMessage }) => {
     <div className="sidebar">
       <div className="sidebar__header">
         <div className="sidebar__header--dp">
-          <Avatar src="https://i.pinimg.com/474x/20/62/69/20626905851e066e66764c3385fa4352.jpg" />
+          <Avatar src={currentUser.photoURL} />
         </div>
         <div className="sidebar__header--icon-container">
           <div className="sidebar__header--icon-container__icon1">
@@ -108,5 +109,6 @@ const Sidebar = ({ checkLastMessage }) => {
     </div>
   );
 };
+const mapStateToProps = (state) => ({ currentUser: state.currentUser });
 
-export default Sidebar;
+export default connect(mapStateToProps)(Sidebar);

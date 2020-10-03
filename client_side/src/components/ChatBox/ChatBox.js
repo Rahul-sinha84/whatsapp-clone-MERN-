@@ -11,8 +11,9 @@ import {
 import "./ChatBox.css";
 import { useParams } from "react-router-dom";
 import fetchGraphQL from "../../apis/fetchGraphQL";
+import { connect } from "react-redux";
 
-const ChatBox = ({ noOfMessage }) => {
+const ChatBox = ({ noOfMessage, currentUser }) => {
   const { roomId } = useParams();
   //for storing the details current data
   const [room, setRoom] = useState({});
@@ -62,7 +63,7 @@ const ChatBox = ({ noOfMessage }) => {
           query{
             getRoom(_id:"${roomId}"){
               messages{
-                name message timestamp _id
+                name message timestamp _id uniqueId
               }
             }
           }
@@ -83,7 +84,11 @@ const ChatBox = ({ noOfMessage }) => {
       .post("/graphql", {
         query: `
         mutation{
-          createMessage(_id:"${roomId}",name:"Brie", message:"${input}", timestamp:"${new Date().getHours()}:${new Date().getMinutes()}",uniqueId:"000" ){
+          createMessage(_id:"${roomId}",name:"${
+          currentUser.displayName
+        }", message:"${input}", timestamp:"${new Date().getHours()}:${new Date().getMinutes()}",uniqueId:"${
+          currentUser.uid
+        }" ){
             message
           }
         }
@@ -115,7 +120,14 @@ const ChatBox = ({ noOfMessage }) => {
       </div>
       <div className="chatbox__main">
         {messages.map((val) => (
-          <div key={val._id} className="chatbox__main--chat">
+          <div
+            key={val._id}
+            className={`chatbox__main--chat ${
+              val.uniqueId === currentUser.uid
+                ? "chatbox__main--chat-received"
+                : ""
+            }`}
+          >
             <h4>{val.name}</h4>
             <p>{val.message}</p>
             <span>{val.timestamp}</span>
@@ -138,4 +150,8 @@ const ChatBox = ({ noOfMessage }) => {
   );
 };
 
-export default ChatBox;
+const mapStateToProps = (state) => {
+  return { currentUser: state.currentUser };
+};
+
+export default connect(mapStateToProps)(ChatBox);
