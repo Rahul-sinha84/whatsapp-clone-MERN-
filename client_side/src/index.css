@@ -21,8 +21,3 @@ body {
 ::-webkit-scrollbar-thumb {
   background: rgb(192, 192, 192);
 }
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  /* background: #888; */
-}
